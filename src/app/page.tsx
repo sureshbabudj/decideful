@@ -1,103 +1,134 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Header, SITE_NAME } from "@/components/common/Header";
+import { Button } from "@/components/ui/button";
+import { GitCompareArrows, Milestone, PenToolIcon } from "lucide-react";
+import { Footer } from "@/components/common/footer";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div
+      data-testid="home-page"
+      className="relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground"
+    >
+      <Header />
+      <main className="flex-grow">
+        <section className="relative flex h-[70vh] items-center justify-center text-center">
+          <div className="absolute inset-0 bg-cover bg-center bg-gradient-to-t from-green-100 to-green-50" />
+          <div className="relative z-10 mx-auto max-w-3xl px-6">
+            <h1 className="text-4xl drop-shadow font-bold leading-tight tracking-tight md:text-6xl">
+              Make Better Decisions, One Entry at a Time
+            </h1>
+            <p className="mt-6 text-lg leading-8">
+              {SITE_NAME} is your personal decision-making journal. Track your
+              reasoning, expected outcomes, and actual results to learn from
+              your choices and improve your future decisions.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Button asChild size="lg" className="text-lg px-6 py-3">
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+          <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight sm:text-4xl md:mx-auto">
+            <span className="relative inline-block">
+              <svg
+                viewBox="0 0 52 24"
+                fill="currentColor"
+                className="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+              >
+                <defs>
+                  <pattern
+                    id="df31b9f6-a505-42f8-af91-d2b7c3218e5c"
+                    x={0}
+                    y={0}
+                    width=".135"
+                    height=".30"
+                  >
+                    <circle cx={1} cy={1} r=".7" />
+                  </pattern>
+                </defs>
+                <rect
+                  fill="url(#df31b9f6-a505-42f8-af91-d2b7c3218e5c)"
+                  width={52}
+                  height={24}
+                />
+              </svg>
+              <span className="relative">The</span>
+            </span>{" "}
+            quick and easy way to track your life decisions!
+          </h2>
+          <p className="text-base md:text-lg">
+            {SITE_NAME} is your personal{" "}
+            <span className="text-primary font-black">decision-making </span>{" "}
+            journal.
+          </p>
+        </div>
+        <div className="grid gap-8 row-gap-8 lg:grid-cols-3">
+          <div className="text-center">
+            <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-accent mx-auto sm:w-24 sm:h-24">
+              <PenToolIcon className="text-accent-foreground w-6 h-6 sm:w-10 sm:h-10" />
+            </div>
+            <h6 className="mb-2 font-semibold leading-5">
+              Log important decisions
+            </h6>
+            <p className="max-w-md mb-3 text-sm sm:mx-auto">
+              Log important decisions with context, and track your reasoning,
+              expected outcomes, and actual results to learn from your choices
+            </p>
+            <Link
+              href="/"
+              aria-label=""
+              className="inline-flex items-center font-semibold transition-colors duration-200 text-accent-foreground hover:text-deep-purple-800"
+            >
+              Learn more
+            </Link>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-accent mx-auto sm:w-24 sm:h-24">
+              <Milestone className="text-accent-foreground w-6 h-6 sm:w-10 sm:h-10" />
+            </div>
+            <h6 className="mb-2 font-semibold leading-5">
+              Set milestones & review dates
+            </h6>
+            <p className="max-w-md mb-3 text-sm sm:mx-auto">
+              Set milestones and review dates to track your progress and and
+              keep analysing your decisions on fixed timeframe
+            </p>
+            <Link
+              href="/"
+              aria-label=""
+              className="inline-flex items-center font-semibold transition-colors duration-200 text-accent-foreground hover:text-deep-purple-800"
+            >
+              Learn more
+            </Link>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-accent mx-auto sm:w-24 sm:h-24">
+              <GitCompareArrows className="text-accent-foreground w-6 h-6 sm:w-10 sm:h-10" />
+            </div>
+            <h6 className="mb-2 font-semibold leading-5">
+              Compare expectations vs reality
+            </h6>
+            <p className="max-w-md mb-3 text-sm sm:mx-auto">
+              Compare expectations and reality to learn from your choices and
+              Learn from your decision patterns and plan for the future
+            </p>
+            <Link
+              href="/"
+              aria-label=""
+              className="inline-flex items-center font-semibold transition-colors duration-200 text-accent-foreground hover:text-deep-purple-800"
+            >
+              Learn more
+            </Link>
+          </div>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
