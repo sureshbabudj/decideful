@@ -5,6 +5,14 @@ import { DecisionForm } from "@/components/decisions/decision-form";
 import { useParams, useRouter } from "next/navigation";
 import { Decision } from "@/types";
 import { Loader2 } from "lucide-react";
+import { db } from "@/lib/firebase/client";
+import { doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
+import { snapToTyped } from "@/lib/firebase/utils";
+import { decisionSchema } from "@/types/transformSchema";
+import { DecisionFormData } from "@/utils/validation";
+import { toast } from "sonner";
 
 function EditDecisionContent() {
   const params = useParams();
@@ -12,49 +20,92 @@ function EditDecisionContent() {
   const decisionId = params.id as string;
   const [decision, setDecision] = useState<Decision | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Simulated loading state and fetching decision from a store or API
-  const [loading, setLoading] = useState(false);
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     // Replace this with actual data fetching logic
-    const getDecisionById = (id: string): Decision | null => {
-      setLoading(false);
-      console.log("Fetching decision with ID:", id);
-      return null; // Replace with actual fetching logic
+    const getDecisionById = async (id: string): Promise<Decision | null> => {
+      if (!user) {
+        return null;
+      }
+      const decisionsRef = collection(db, "users", user.uid, "decisions");
+      const q = query(decisionsRef, orderBy("updatedAt", "desc"));
+      const snap = await getDocs(q);
+
+      let foundDecision: Decision | null = null;
+      snap.forEach((docSnap) => {
+        if (docSnap.id === id) {
+          foundDecision = { id: docSnap.id, ...docSnap.data() } as Decision;
+        }
+      });
+      return foundDecision;
     };
 
-    const loadDecision = () => {
-      const foundDecision = getDecisionById(decisionId);
+    const loadDecision = async () => {
+      const foundDecision = await getDecisionById(decisionId);
       if (foundDecision) {
-        setDecision(foundDecision);
+        const parsed = snapToTyped(
+          { id: foundDecision.id, data: () => ({ ...foundDecision }) },
+          decisionSchema
+        );
+        setDecision(parsed);
         setIsLoading(false);
       } else {
-        // Decision not found in cache, redirect to decisions list
+        setIsLoading(false);
         router.push("/decisions");
       }
     };
 
     loadDecision();
-  }, [decisionId, router]);
+  }, [decisionId, router, user]);
 
   const updateDecision = async (id: string, data: Partial<Decision>) => {
-    // Replace this with actual update logic
-    console.log("Updating decision with ID:", id, "with data:", data);
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    const decisionRef = doc(db, "users", user.uid, "decisions", id);
+    await updateDoc(decisionRef, data);
   };
 
-  const handleSubmit = async (data: Partial<Decision>) => {
-    if (!decision) return;
-
+  const handleSubmit = async (data: DecisionFormData) => {
+    setIsLoading(true);
     try {
-      await updateDecision(decision.id, data);
-      router.push(`/decisions/${decision.id}`);
+      const {
+        title,
+        context,
+        finalChoice,
+        expectedOutcome,
+        reviewDate,
+        milestones,
+      } = data;
+      await updateDecision(decisionId, {
+        title,
+        context,
+        finalChoice,
+        expectedOutcome,
+        reviewDate: new Date(reviewDate),
+        status: "pending",
+        milestones: milestones.map((milestone) => ({
+          id: crypto.randomUUID(),
+          description: milestone.description,
+          expectedDate: new Date(milestone.expectedDate),
+          category: milestone.category,
+        })),
+        updatedAt: new Date(),
+      });
+      router.push(`/decisions/${decisionId}`);
     } catch (error) {
-      console.error("Failed to update decision:", error);
+      toast.error(
+        `Failed to update decision: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (isLoading || loading) {
+  if (isLoading) {
     return <Loader2 className="animate-spin" />;
   }
 
@@ -99,7 +150,7 @@ function EditDecisionContent() {
               })) || [],
           }}
           onSubmit={handleSubmit}
-          isLoading={loading}
+          isLoading={isLoading}
           isEditing={true}
         />
       </div>

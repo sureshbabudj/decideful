@@ -13,7 +13,7 @@ export default function Home() {
       <Header />
       <main className="flex-grow">
         <section className="relative flex h-[70vh] items-center justify-center text-center">
-          <div className="absolute inset-0 bg-cover bg-center bg-gradient-to-t from-green-100 to-green-50" />
+          <div className="absolute inset-0 bg-cover bg-center bg-gradient-to-t from-green-100 to-green-50 dark:from-green-900 dark:to-green-950" />
           <div className="relative z-10 mx-auto max-w-3xl px-6">
             <h1 className="text-4xl drop-shadow font-bold leading-tight tracking-tight md:text-6xl">
               Make Better Decisions, One Entry at a Time

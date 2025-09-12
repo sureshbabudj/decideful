@@ -1,12 +1,14 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { AppSidebar } from "@/components/dashboard/sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { requireAuth } from "@/lib/auth/server";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await requireAuth();
   return (
     <SidebarProvider>
       <AppSidebar />

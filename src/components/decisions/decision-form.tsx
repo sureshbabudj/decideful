@@ -103,7 +103,6 @@ export function DecisionForm({
 
   const handleFormSubmit = async (data: DecisionFormData) => {
     try {
-      debugger;
       await onSubmit(data);
       if (!isEditing) {
         reset();

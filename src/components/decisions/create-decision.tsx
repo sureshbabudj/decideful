@@ -1,15 +1,15 @@
 "use client";
 
 import { DecisionForm } from "@/components/decisions/decision-form";
-import useStore from "@/hooks/use-store";
 import { createDecision } from "@/lib/firestore";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
 import { DecisionFormData } from "@/utils/validation";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export function CreateDecision() {
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 

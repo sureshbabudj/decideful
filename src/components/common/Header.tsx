@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useStore } from "@/hooks/use-store";
 import UserMenu from "./user-menu";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
 
 export const SITE_NAME = "Decideful";
 
@@ -38,7 +38,8 @@ export function Logo({
 }
 
 export function Header() {
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
+
   return (
     <header className="w-full">
       <div className="container mx-auto flex items-center justify-between px-6 py-4">

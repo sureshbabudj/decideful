@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, Settings, User, User2 } from "lucide-react";
 import Link from "next/link";
-import { useStore } from "@/hooks/use-store";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
 
 export default function UserMenu() {
-  const user = useStore((state) => state.user);
-  const logout = useStore((state) => state.signOutUser);
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.signOut);
 
   const userInitial = user?.displayName?.charAt(0)?.toUpperCase() ||
     user?.email?.charAt(0)?.toUpperCase() || <User2 className="size-4" />;

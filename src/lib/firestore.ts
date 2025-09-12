@@ -13,7 +13,6 @@ import {
   onSnapshot,
   QueryConstraint,
 } from "firebase/firestore";
-import { db } from "./firebase";
 import {
   Decision,
   DecisionDocument,
@@ -22,6 +21,7 @@ import {
   NotificationDocument,
   ServiceResult,
 } from "@/types";
+import { db } from "./firebase/client";
 
 // Generic function to handle Firestore operations
 const handleFirestoreOperation = async <T>(

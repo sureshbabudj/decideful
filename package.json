@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack --port 4581",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "emulators": "firebase emulators:start --import ./emulator-data --export-on-exit",
+    "emulators:export": "firebase emulators:export ./emulator-data"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

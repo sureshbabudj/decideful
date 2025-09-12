@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Decision, Milestone, OutcomeFormData } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -20,17 +20,14 @@ import { formatDate } from "date-fns";
 import { OutcomeForm } from "./outcome-form";
 
 interface DecisionDetailProps {
-  decisionId: string;
+  decision: Decision;
 }
 
-export const DecisionDetail: React.FC<DecisionDetailProps> = ({
-  decisionId,
-}) => {
+export const DecisionDetail: React.FC<DecisionDetailProps> = ({ decision }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [decision, setDecision] = useState<Decision | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showOutcomeForm, setShowOutcomeForm] = useState(false);
   const [isSubmittingOutcome, setIsSubmittingOutcome] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -42,55 +39,12 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
     console.log("Updating decision with outcome:", decisionId, outcome);
   };
 
-  const getDecision = async (decisionId: string): Promise<Decision> => {
-    setLoading(true);
-    // Simulate fetching data with a delay
-    return await new Promise((resolve) =>
-      setTimeout(() => {
-        resolve({
-          id: decisionId,
-          userId: "",
-          title: "",
-          context: "",
-          finalChoice: "",
-          expectedOutcome: "",
-          reviewDate: new Date(),
-          status: "pending",
-          milestones: [],
-          actualOutcome: "",
-          expectationCorrect: false,
-          keyLearnings: "",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-        setLoading(false);
-        setError(null);
-      }, 1000)
-    );
-  };
-
-  useEffect(() => {
-    const loadDecision = async () => {
-      try {
-        setIsLoading(true);
-        const decisionData = await getDecision(decisionId);
-        setDecision(decisionData);
-      } catch (err) {
-        console.error("Failed to load decision:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadDecision();
-  }, [decisionId]);
-
   const handleBackToDashboard = () => {
     router.push("/dashboard");
   };
 
   const handleEditDecision = () => {
-    router.push(`/decisions/${decisionId}/edit`);
+    router.push(`/decisions/${decision.id}/edit`);
   };
 
   const handleShowOutcomeForm = () => {
@@ -109,8 +63,8 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
       await updateDecisionWithOutcome(decision.id, outcomeData);
 
       // Reload the decision to get updated data
-      const updatedDecision = await getDecision(decisionId);
-      setDecision(updatedDecision);
+      // const updatedDecision = await getDecision(decisionId);
+      // setDecision(updatedDecision);
       setShowOutcomeForm(false);
 
       // Show success message
@@ -393,49 +347,45 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Decision Context */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-muted-foreground/10 rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold mb-4">
                 Context & Background
               </h2>
-              <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap">
+              <p className="text-sm sm:text-base  whitespace-pre-wrap">
                 {decision.context}
               </p>
             </div>
 
             {/* Final Choice */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-muted-foreground/10 rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold mb-4">
                 Final Choice
               </h2>
-              <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap">
+              <p className="text-sm sm:text-base  whitespace-pre-wrap">
                 {decision.finalChoice}
               </p>
             </div>
 
             {/* Expected Outcome */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-muted-foreground/10 rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold mb-4">
                 Expected Outcome
               </h2>
-              <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap">
+              <p className="text-sm sm:text-base  whitespace-pre-wrap">
                 {decision.expectedOutcome}
               </p>
             </div>
 
             {/* Actual Outcome (if reviewed) */}
             {decision.status === "reviewed" && decision.actualOutcome && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  Actual Outcome
-                </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">
-                  {decision.actualOutcome}
-                </p>
+              <div className="bg-muted-foreground/10 rounded-lg shadow p-6">
+                <h2 className="text-lg font-semibold mb-4">Actual Outcome</h2>
+                <p className=" whitespace-pre-wrap">{decision.actualOutcome}</p>
 
                 {decision.expectationCorrect !== undefined && (
-                  <div className="mt-4 p-3 rounded-md bg-gray-50">
+                  <div className="mt-4 p-3 rounded-m">
                     <div className="flex items-center">
-                      <span className="text-sm font-medium text-gray-700 mr-2">
+                      <span className="text-sm font-medium  mr-2">
                         Expectation was correct:
                       </span>
                       <span
@@ -455,13 +405,9 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
 
             {/* Key Learnings (if reviewed) */}
             {decision.status === "reviewed" && decision.keyLearnings && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  Key Learnings
-                </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">
-                  {decision.keyLearnings}
-                </p>
+              <div className="bg-muted-foreground/10 rounded-lg shadow p-6">
+                <h2 className="text-lg font-semibold mb-4">Key Learnings</h2>
+                <p className=" whitespace-pre-wrap">{decision.keyLearnings}</p>
               </div>
             )}
           </div>
@@ -469,26 +415,28 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Decision Info */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Decision Info
-              </h3>
+            <div className="bg-muted-foreground/10 rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold mb-4">Decision Info</h3>
               <dl className="space-y-3">
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Status</dt>
+                  <dt className="text-sm font-medium text-muted-foreground">
+                    Status
+                  </dt>
                   <dd className="mt-1">{getStatusBadge(decision.status)}</dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Created</dt>
-                  <dd className="mt-1 text-sm text-gray-900">
+                  <dt className="text-sm font-medium text-muted-foreground">
+                    Created
+                  </dt>
+                  <dd className="mt-1 text-sm">
                     {formatDate(decision.createdAt, "PP")}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">
+                  <dt className="text-sm font-medium text-muted-foreground">
                     Review Date
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
+                  <dd className="mt-1 text-sm">
                     {formatDate(decision.reviewDate, "PP")}
                   </dd>
                 </div>
@@ -496,10 +444,10 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
                   decision.updatedAt.getTime() !==
                     decision.createdAt.getTime() && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">
+                      <dt className="text-sm font-medium text-muted-foreground">
                         Last Updated
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-900">
+                      <dd className="mt-1 text-sm">
                         {formatDate(decision.updatedAt, "PP")}
                       </dd>
                     </div>
@@ -509,8 +457,8 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
 
             {/* Milestones */}
             {sortedMilestones.length > 0 && (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-muted-foreground/10 rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold mb-4">
                   Milestones ({sortedMilestones.length})
                 </h3>
                 <div className="space-y-4">
@@ -522,14 +470,14 @@ export const DecisionDetail: React.FC<DecisionDetailProps> = ({
                       {getMilestoneStatusIcon(milestone)}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium truncate">
                             {milestone.description}
                           </p>
                           <Badge variant="secondary" className="text-xs">
                             {milestone.category}
                           </Badge>
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           Expected: {formatDate(milestone.expectedDate, "PP")}
                         </p>
                         {milestone.notes && (
