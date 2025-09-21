@@ -45,6 +45,12 @@ export const decisionSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
+export const optionChangeSchema = z.object({
+  changeDate: z.date(),
+  reason: z.string().optional(),
+  newOptions: z.array(optionSchema).min(2, "At least 2 options are required"),
+});
+
 export const reflectionSchema = z.object({
   actualOutcome: z
     .string()
@@ -54,11 +60,31 @@ export const reflectionSchema = z.object({
     .min(10, "Lessons learned must be at least 10 characters"),
   outcomeRating: z.number().min(1).max(5),
   wouldRepeat: z.boolean(),
-  accuracy: z.number().min(0).max(100).optional(),
+  accuracy: z.number().min(0).max(100).default(0).optional(),
+  optionChanges: optionChangeSchema.optional(),
+  progressMetrics: z
+    .object({
+      skillLevel: z.number().min(1).max(10).default(1).optional(),
+      confidence: z.number().min(0).max(100).default(0).optional(),
+      satisfaction: z.number().min(1).max(5).default(1).optional(),
+    })
+    .optional(),
+  nextSteps: z.string().default("").optional(),
+});
+
+export const reflectionUpdateSchema = z.object({
+  reflectionId: z.string(),
+  decisionId: z.string(),
+  userId: z.string(),
+  ...reflectionSchema.shape,
+  reflectionNumber: z.number(), // Track which reflection this is (1st, 2nd, etc.)
+  reflectionDate: z.date(),
 });
 
 export type DecisionInput = z.infer<typeof decisionSchema>;
 export type ReflectionInput = z.infer<typeof reflectionSchema>;
+export type ReflectionUpdateInput = z.infer<typeof reflectionUpdateSchema>;
+export type OptionChangeInput = z.infer<typeof optionChangeSchema>;
 export type DecisionType = z.infer<typeof decisionTypeEnum>;
 export type CategoryType = z.infer<typeof categoryEnum>;
 export type ReviewFrequencyType = z.infer<typeof reviewFrequencyEnum>;

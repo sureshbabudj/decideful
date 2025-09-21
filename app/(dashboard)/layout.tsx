@@ -9,6 +9,7 @@ import { Sidebar as AppSidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { Loader2 } from "lucide-react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function DashboardLayout({
   children,
@@ -68,8 +69,10 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="text-foreground">
-        <Header />
-        <div className="p-6">{children}</div>
+        <TooltipProvider>
+          <Header />
+          <div className="p-6">{children}</div>
+        </TooltipProvider>
       </SidebarInset>
     </SidebarProvider>
   );

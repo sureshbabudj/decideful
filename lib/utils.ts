@@ -23,3 +23,16 @@ export const convertTimeStamp = (timestamp: Timestamp) => {
     return new Date();
   }
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertDecisionDates = (obj: any) => {
+  if (obj && typeof obj === "object") {
+    for (const key in obj) {
+      if (key.endsWith("At") || key.endsWith("Date") || key === "timestamp") {
+        obj[key] = convertTimeStamp(obj[key] as Timestamp);
+      } else if (typeof obj[key] === "object" && obj[key] !== null) {
+        convertDecisionDates(obj[key]);
+      }
+    }
+  }
+};

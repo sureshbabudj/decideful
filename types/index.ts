@@ -1,5 +1,30 @@
-import { optionSchema } from "@/lib/schemas/decision.schema";
-import z, { boolean } from "zod";
+import { OptionType } from "@/lib/schemas/decision.schema";
+
+export interface Reflection {
+  id: string;
+  decisionId: string;
+  userId: string;
+  reflectionNumber: number;
+  actualOutcome: string;
+  lessonsLearned: string;
+  outcomeRating: number;
+  wouldRepeat: boolean;
+  accuracy?: number;
+  optionChanges?: {
+    newOptions: OptionType[];
+    reason?: string;
+    timestamp: Date;
+  };
+  progressMetrics?: {
+    skillLevel?: number;
+    confidence?: number;
+    satisfaction?: number;
+  };
+  nextSteps?: string;
+  reflectionDate: Date;
+  createdAt: Date;
+  updatedAt?: Date;
+}
 
 export interface Decision {
   id: string;
@@ -8,20 +33,22 @@ export interface Decision {
   category: string;
   type: string;
   context: string;
-  options: z.infer<typeof optionSchema>[];
+  options: OptionType[];
   expectedOutcome: string;
   actualOutcome?: string;
-  confidence: number;
+  confidence?: number;
   reviewDate: Date;
   reviewed: boolean;
+  reflections: Reflection[];
+  currentReflectionCount: number;
+  lastReflectionDate?: Date;
+  optionHistory: Array<{
+    timestamp: Date;
+    options: OptionType[];
+    reason?: string;
+  }>;
   createdAt: Date;
-  updatedAt?: Date;
-  reflection?: {
-    actualOutcome: string;
-    lessonsLearned: string;
-    outcomeRating: number;
-    wouldRepeat: boolean;
-  };
+  updatedAt: Date;
 }
 
 export interface UserPreferences {
